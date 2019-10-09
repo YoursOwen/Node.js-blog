@@ -2,7 +2,6 @@ const http = require('http')
 const querystring = require('querystring')
 
 const server = http.createServer((req, res) => {
-  // console.log(req)
   const url = req.url
   const method = req.method
   const path = req.path
@@ -19,7 +18,6 @@ const server = http.createServer((req, res) => {
     res.end(
       JSON.stringify(returnObj)
     )
-    console.log(query)
   }
 
   if (method === 'POST') {
