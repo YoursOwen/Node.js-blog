@@ -7,7 +7,7 @@ module.exports = function (req, res) {
 
 	if (method === 'POST' && path === '/api/user') {
 		const { username, password } = req.body
-		console.log(req.body)
+
 		const result = handleLogin(username,password)
 
 		if (result) {
