@@ -40,21 +40,26 @@ const handleServer = (req, res) => {
 	getPostData(req).then(postData => {
 		req.body = postData
 
-		const blogServerRes = handleBlogServer(req, res)
-		if (blogServerRes) {
-			res.end(
-				JSON.stringify(blogServerRes)
-			)
+		const blogServerPromise = handleBlogServer(req, res)
+		if (blogServerPromise) {
+			blogServerPromise.then(result => {
+				res.end(
+					JSON.stringify(result)
+				)
+			})
 			return
 		}
-
-		const userServerRes = handleUserServer(req, res)
-		if (userServerRes) {
-			res.end(
-				JSON.stringify(userServerRes)
-			)
+		
+		const userServerPromise = handleUserServer(req, res)
+		if (userServerPromise) {
+			userServerPromise.then(result => {
+				res.end(
+					JSON.stringify(result)
+				)
+			})
 			return
 		}
+		
 
 		//处理未捕获404
 		res.writeHeader(404, {

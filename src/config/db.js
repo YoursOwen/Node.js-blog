@@ -21,6 +21,6 @@ if (env === 'developoment') {
   }
 }
 
-module.export = {
+module.exports = {
   MYSQL_CONFIG
 }

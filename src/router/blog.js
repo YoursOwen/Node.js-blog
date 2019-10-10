@@ -13,31 +13,42 @@ module.exports = function (req, res) {
 	
 	//获取博客列表
 	if (method === 'GET' && path === '/api/blog/list') {
-		const { author, list } = req.query
-		const listData = getBlogList(author, list)
-		return new SuccessModel(listData, 'succsee')
-	}
+		const { author, keyword } = req.query
+		const result = getBlogList(author, keyword)
+		return result.then(listData => {
+			return new SuccessModel(listData, 'succsee')
+		})
+	}	
 
 	//获取博客详情
 	if (method === 'GET' && path === '/api/blog/detail') {
-		const detail = getBlogDetail(id)
-		return new SuccessModel(detail)
+		const result = getBlogDetail(id)
+		return result.then(detail => {
+			return new SuccessModel(detail)
+		})
+		
 	}
 
 	//新建博客
 	if (method === 'POST' && path === '/api/blog/new') {
+		req.body.author = "王五"
 		const postData = newBlog(req.body)
-		return new SuccessModel(postData)
+		return postData.then(res => {
+			return new SuccessModel(res,'success')
+		})
 	}
 
 	//更新博客
 	if (method === 'POST' && path === '/api/blog/update') {
-		const ret = updateBlog(id, req.body)
-		if (ret) {
-			return new SuccessModel(ret)
-		} else {
-			return new ErrorModel('更新博客失败!')
-		}
+		const result = updateBlog(id, req.body)
+		result.then(ret => {
+			console.log(ret)
+			if (ret) {
+				return new SuccessModel(ret,'更新成功!')
+			} else {
+				return new ErrorModel('更新博客失败!')
+			}
+		})
 	}
 
 	//删除博客
