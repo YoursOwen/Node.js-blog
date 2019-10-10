@@ -10,6 +10,7 @@ module.exports = function (req, res) {
 	const path = req.url.split('?')[0]
 	const method = req.method
 	const id = req.query.id
+	
 	//获取博客列表
 	if (method === 'GET' && path === '/api/blog/list') {
 		const { author, list } = req.query
