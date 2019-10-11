@@ -41,7 +41,7 @@ module.exports = function (req, res) {
 	//更新博客
 	if (method === 'POST' && path === '/api/blog/update') {
 		const result = updateBlog(id, req.body)
-		result.then(ret => {
+		return result.then(ret => {
 			console.log(ret)
 			if (ret) {
 				return new SuccessModel(ret,'更新成功!')
@@ -52,12 +52,15 @@ module.exports = function (req, res) {
 	}
 
 	//删除博客
-	if (method === 'POST' && path === '/api/blog/del') {
-		const ret = delBlog(id)
-		if (ret) {
-			return new SuccessModel(ret)
-		} else {
-			return new ErrorModel('删除博客失败!')
-		}
+	if (method === 'GET' && path === '/api/blog/del') {
+		const result = delBlog(id)
+		return result.then(res => {
+			if (res) {
+				return new SuccessModel(res, '删除成功!')
+			} else {
+				return new ErrorModel('删除博客失败!')
+			}
+		})
+		
 	}
 }
