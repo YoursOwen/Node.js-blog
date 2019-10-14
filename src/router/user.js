@@ -5,8 +5,8 @@ module.exports = function (req, res) {
 	const path = req.url.split('?')[0]
 	const method = req.method
 
-	if (method === 'GET' && path === '/api/user') {
-		const { username, password } = req.query
+	if (method === 'POST' && path === '/api/user') {
+		const { username, password } = req.body
 		const result = handleLogin(username,password)
 		return result.then(loginData => {
 			if (loginData.username) {
@@ -21,14 +21,14 @@ module.exports = function (req, res) {
 		})
 	}
 
-	if (method === 'GET' && path === '/api/user/login-test') {
-		if (req.session.username) {
-			console.log(Promise.resolve(new SuccessModel()))
-			return Promise.resolve(new SuccessModel({
-				session: req.session
-			}))
-		} else {
-			return Promise.resolve(new ErrorModel('登陆失败!'))
-		}
-	}
+	// if (method === 'GET' && path === '/api/user/login-test') {
+	// 	if (req.session.username) {
+	// 		console.log(Promise.resolve(new SuccessModel()))
+	// 		return Promise.resolve(new SuccessModel({
+	// 			session: req.session
+	// 		}))
+	// 	} else {
+	// 		return Promise.resolve(new ErrorModel('登陆失败!'))
+	// 	}
+	// }
 }

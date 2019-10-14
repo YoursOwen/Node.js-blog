@@ -1,6 +1,7 @@
 const querystring = require('querystring')
 const handleBlogServer = require('./src/router/blog')
 const handleUserServer = require('./src/router/user')
+const { set, get } = require('./src/db/redis')
 
 const getCookieExpires = () => {
 	let d = new Date()
@@ -10,7 +11,7 @@ const getCookieExpires = () => {
 }
 
 //session
-const SESSION_DATA = {}
+// const SESSION_DATA = {} (切换redis)
 
 const getPostData = (req) => {
 	return new Promise((resolve, reject) => {
@@ -61,21 +62,39 @@ const handleServer = (req, res) => {
 	})
 
 	//解析session
+	// let needSetCookie = false
+	// let u_id = req.cookie.u_id
+	// if (u_id) {
+	// 	if (!SESSION_DATA[u_id]) {
+	// 		SESSION_DATA[u_id] = {}
+	// 	} 
+	// } else {
+	// 	needSetCookie = true
+	// 	u_id = `${Date.now()}_${Math.random()}`
+	// 	SESSION_DATA[u_id] = {}
+	// }
+	// req.session = SESSION_DATA[u_id]
+
 	let needSetCookie = false
 	let u_id = req.cookie.u_id
-	if (u_id) {
-		if (!SESSION_DATA[u_id]) {
-			SESSION_DATA[u_id] = {}
-		} 
-	} else {
+
+	if (!u_id) {
 		needSetCookie = true
 		u_id = `${Date.now()}_${Math.random()}`
-		SESSION_DATA[u_id] = {}
+		set(u_id, {})
 	}
-	req.session = SESSION_DATA[u_id]
 
+	req.sessionId = u_id
+	get(req.sessionId).then(sessionData => {
+		if (sessionData == null) {
+			set(req.sessionId,{})
+			req.session = {}
+		} else {
+			req.session = sessionData
+		}
 
-	getPostData(req).then(postData => {
+		return getPostData(req)
+	}).then(postData => {
 		req.body = postData
 
 		const blogServerPromise = handleBlogServer(req, res)

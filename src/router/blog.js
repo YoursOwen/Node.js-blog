@@ -6,6 +6,12 @@ const {
 	delBlog,
 	updateBlog } = require('../controller/blog.js')
 
+function isCheckLogin(req) {
+	if (!req.session.username) {
+		return Promise.resolve(new ErrorModel('登陆失败!'))
+	} 
+}
+
 module.exports = function (req, res) {
 	const path = req.url.split('?')[0]
 	const method = req.method
@@ -13,6 +19,12 @@ module.exports = function (req, res) {
 	
 	//获取博客列表
 	if (method === 'GET' && path === '/api/blog/list') {
+
+		const LoginRes = isCheckLogin(req)
+		if (LoginRes) {
+			return LoginRes
+		}
+
 		const { author, keyword } = req.query
 		const result = getBlogList(author, keyword)
 		return result.then(listData => {
@@ -22,6 +34,12 @@ module.exports = function (req, res) {
 
 	//获取博客详情
 	if (method === 'GET' && path === '/api/blog/detail') {
+
+		const LoginRes = isCheckLogin(req)
+		if (LoginRes) {
+			return LoginRes
+		}
+
 		const result = getBlogDetail(id)
 		return result.then(detail => {
 			return new SuccessModel(detail)
@@ -31,7 +49,13 @@ module.exports = function (req, res) {
 
 	//新建博客
 	if (method === 'POST' && path === '/api/blog/new') {
-		req.body.author = "王五"
+
+		const LoginRes = isCheckLogin(req)
+		if (LoginRes) {
+			return LoginRes
+		}
+
+		req.body.author = req.session.username
 		const postData = newBlog(req.body)
 		return postData.then(res => {
 			return new SuccessModel(res,'success')
@@ -40,6 +64,12 @@ module.exports = function (req, res) {
 
 	//更新博客
 	if (method === 'POST' && path === '/api/blog/update') {
+
+		const LoginRes = isCheckLogin(req)
+		if (LoginRes) {
+			return LoginRes
+		}
+
 		const result = updateBlog(id, req.body)
 		return result.then(ret => {
 			console.log(ret)
@@ -53,6 +83,12 @@ module.exports = function (req, res) {
 
 	//删除博客
 	if (method === 'GET' && path === '/api/blog/del') {
+
+		const LoginRes = isCheckLogin(req)
+		if (LoginRes) {
+			return LoginRes
+		}
+
 		const result = delBlog(id)
 		return result.then(res => {
 			if (res) {
