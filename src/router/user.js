@@ -1,11 +1,12 @@
 const { handleLogin } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/basicModel.js')
+const { set } = require('../db/redis')
 
 module.exports = function (req, res) {
 	const path = req.url.split('?')[0]
 	const method = req.method
 
-	if (method === 'POST' && path === '/api/user') {
+	if (method === 'POST' && path === '/api/user/login') {
 		const { username, password } = req.body
 		const result = handleLogin(username,password)
 		return result.then(loginData => {
@@ -14,21 +15,11 @@ module.exports = function (req, res) {
 				req.session.username = loginData.username
 				req.session.realname = loginData.realname
 
+				set(req.sessionId, req.session)
 				return new SuccessModel()
 			} else {
 				return new ErrorModel('登陆失败!')
 			}
 		})
 	}
-
-	// if (method === 'GET' && path === '/api/user/login-test') {
-	// 	if (req.session.username) {
-	// 		console.log(Promise.resolve(new SuccessModel()))
-	// 		return Promise.resolve(new SuccessModel({
-	// 			session: req.session
-	// 		}))
-	// 	} else {
-	// 		return Promise.resolve(new ErrorModel('登陆失败!'))
-	// 	}
-	// }
 }

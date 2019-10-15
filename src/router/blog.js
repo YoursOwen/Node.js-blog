@@ -19,7 +19,6 @@ module.exports = function (req, res) {
 	
 	//获取博客列表
 	if (method === 'GET' && path === '/api/blog/list') {
-
 		const LoginRes = isCheckLogin(req)
 		if (LoginRes) {
 			return LoginRes

@@ -85,7 +85,7 @@ const handleServer = (req, res) => {
 	}
 
 	req.sessionId = u_id
-	get(req.sessionId).then(sessionData => {
+	get(req.sessionId).then(sessionData => {	
 		if (sessionData == null) {
 			set(req.sessionId,{})
 			req.session = {}

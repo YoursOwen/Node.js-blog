@@ -1,7 +1,7 @@
 const { exec } = require('../db/mysql')
 
 const getBlogList = (auhtor, keyword) => {
-    let sql = `select title,createTime from blogs where 1=1 `
+    let sql = `select id,title,createTime,author from blogs where 1=1 `
 
     if (auhtor) {
         sql += `and author = '${auhtor}' `

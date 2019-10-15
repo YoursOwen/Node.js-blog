@@ -3,5 +3,5 @@ const handleServer = require('../app.js')
 
 const server = http.createServer(handleServer)
 
-server.listen(5500)
-console.log('App is running at 5500 Port')
+server.listen(8000)
+console.log('App is running at 8000 Port')
