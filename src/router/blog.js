@@ -81,14 +81,13 @@ module.exports = function (req, res) {
 	}
 
 	//删除博客
-	if (method === 'GET' && path === '/api/blog/del') {
-
+	if (method === 'POST' && path === '/api/blog/del') {
 		const LoginRes = isCheckLogin(req)
 		if (LoginRes) {
 			return LoginRes
 		}
 
-		const result = delBlog(id)
+		const result = delBlog(id, req.session.realname)
 		return result.then(res => {
 			if (res) {
 				return new SuccessModel(res, '删除成功!')
@@ -96,6 +95,5 @@ module.exports = function (req, res) {
 				return new ErrorModel('删除博客失败!')
 			}
 		})
-		
 	}
 }
