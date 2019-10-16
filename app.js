@@ -2,6 +2,7 @@ const querystring = require('querystring')
 const handleBlogServer = require('./src/router/blog')
 const handleUserServer = require('./src/router/user')
 const { set, get } = require('./src/db/redis')
+const { access } = require('./src/util/log')
 
 const getCookieExpires = () => {
 	let d = new Date()
@@ -44,6 +45,11 @@ const getPostData = (req) => {
 }
 
 const handleServer = (req, res) => {
+	//写入access log
+	access(
+		`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`
+	)
+
 	res.setHeader('content-type', 'application/json')
 
 	//解析query
