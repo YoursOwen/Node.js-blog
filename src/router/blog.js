@@ -19,12 +19,19 @@ module.exports = function (req, res) {
 	
 	//获取博客列表
 	if (method === 'GET' && path === '/api/blog/list') {
-		const LoginRes = isCheckLogin(req)
-		if (LoginRes) {
-			return LoginRes
+		let { author, keyword } = req.query
+		
+		if (req.query.isadmin) {
+			const LoginRes = isCheckLogin(req)
+			if (LoginRes) {
+				return LoginRes
+			}
+			//强制查询自己的list
+			author = req.session.username
 		}
+		
 
-		const { author, keyword } = req.query
+		
 		const result = getBlogList(author, keyword)
 		return result.then(listData => {
 			return new SuccessModel(listData, 'succsee')
