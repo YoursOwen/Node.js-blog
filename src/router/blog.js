@@ -94,7 +94,7 @@ module.exports = function (req, res) {
 			return LoginRes
 		}
 
-		const result = delBlog(id, req.session.realname)
+		const result = delBlog(id, req.session.username)
 		return result.then(res => {
 			if (res) {
 				return new SuccessModel(res, '删除成功!')

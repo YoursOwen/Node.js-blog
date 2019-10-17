@@ -22,5 +22,6 @@ function exec(sql) {
 //不使用con.end() 原因在于1.创建类似单例模式，避免资源消耗 2.该文件只会被执行一次，而exec为异步
 
 module.exports = {
-  exec
+  exec,
+  escape: mysql.escape                                                                                                                         
 }
