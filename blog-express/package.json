@@ -1,0 +1,28 @@
+{
+  "name": "blog1-express",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "nodemon": "cross-env NODE_ENV=development port=8000 nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "mysql": "^2.17.1",
+    "xss": "^1.0.6"
+  },
+  "devDependencies": {
+    "@tencent/tnpm": "^6.1.8",
+    "connect-redis": "^4.0.3",
+    "cross-env": "^6.0.3",
+    "express-session": "^1.17.0",
+    "install": "^0.13.0",
+    "nodemon": "^1.19.4",
+    "redis": "^2.8.0"
+  }
+}
